@@ -172,6 +172,8 @@ int main(int argc, char *argv[])
 
     if (select(nfds + 1, &read_fds, NULL, NULL, NULL) == -1)
     {
+      printf("select.\n");
+      close(sock);
       exit(1);
     }
     if (FD_ISSET(nfds, &read_fds))
