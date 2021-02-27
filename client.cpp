@@ -177,6 +177,7 @@ int main(int argc, char *argv[])
     if (FD_ISSET(nfds, &read_fds))
     {
       //Got something from server
+      memset(buf, 0, sizeof(buf));
       numbytes = recv(sock, buf, sizeof(buf), 0);
       if (numbytes < 0)
       {
@@ -184,15 +185,16 @@ int main(int argc, char *argv[])
         close(sock);
         exit(1);
       }
-      printf("%s.\n", buf);
+      printf("Server: %s.\n", buf);
     }
     if (FD_ISSET(0, &read_fds))
     {
       //Client is writing something
       string temp;
       getline(cin, temp);
-      userInput = "MSG "+temp;
-      
+      userInput = "MSG " + temp;
+      printf("Sending: %s\n", userInput.c_str());
+
       numbytes = send(sock, userInput.c_str(), userInput.length(), 0);
       if (numbytes < 0)
       {
@@ -201,7 +203,6 @@ int main(int argc, char *argv[])
         exit(1);
       }
     }
-
   }
 
   return 0;
