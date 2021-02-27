@@ -201,9 +201,7 @@ int main(int argc, char *argv[])
         exit(1);
       }
     }
-    // if there are any data ready to read from the socket
 
-    //At the same time we need to recive messages and print them.
   }
 
   return 0;
