@@ -1,25 +1,20 @@
-CC = gcc
-CC_FLAGS = -w -g
-
-
-
 all: test client server
 
 
 main.o: main.c
-	$(CC) -Wall -I. -c main.c
+	$(CXX) -Wall -I. -c main.c
 
 
 test: main.o
-	$(CC) -I./ -Wall -lncurses  -o test main.o 
+	$(CXX) -I./ -Wall  -o test main.o 
 
 
 client: client.o
-	$(CC) -Wall -o cchat client.o
+	$(CXX) -Wall -o cchat client.o
 
 server: server.o
-	$(CC) -Wall -o cserverd server.o
+	$(CXX) -Wall -o cserverd server.o
 
 
 clean:
-	rm *.o *.a test server client
+	rm *.o test cchat cserverd
