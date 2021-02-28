@@ -188,11 +188,6 @@ int main(int argc, char *argv[])
           if (string(buf).find(cmds[0]) != string::npos)
           {
             //Found "NICK "
-            printf("NICK.\n");
-            /*char delim2[] = " ";
-            char *nick = strtok(buf, delim2);
-            nick = strtok(NULL, delim2);*/
-
             string nick = removeWord(string(buf), "NICK");
             nick = removeWord(nick, "\n");
             printf("%s\n", nick.c_str());
@@ -217,7 +212,6 @@ int main(int argc, char *argv[])
           else if (string(buf).find(cmds[1]) != string::npos)
           {
             //Found "MSG "
-
             printf("MSG.\n");
             string msg = removeWord(string(buf), "MSG");
             msg = nicknames[i]+": "+msg;
@@ -236,9 +230,7 @@ int main(int argc, char *argv[])
               }
             }
           }
-          //Check what to do (MSG or NICK)
-          //If its a nickname, check it and sed a responce.
-          //If its a message, send the message to all clients, exept the one who sent it
+          
           printf("New message.\n");
         }
       }

@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
         close(sock);
         exit(1);
       }
-      printf("Server: %s.\n", buf);
+      printf("%s.\n", buf);
     }
     if (FD_ISSET(0, &read_fds))
     {
