@@ -47,7 +47,12 @@ int main(int argc, char *argv[])
     printf("Invalid input.\n");
     exit(1);
   }
-  //Check if nickname is too long!!/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  if (strlen(Nickname) > 12)
+  {
+    printf("Nickname is too long.\n");
+    exit(1);
+  }
   //Variables
   int rv;
   int sock;
@@ -187,7 +192,17 @@ int main(int argc, char *argv[])
         close(sock);
         exit(1);
       }
-      printf("%s.\n", buf);
+      //Was this msg from me?
+      int ok = 0;
+      for(int i = 0; i < strlen(Nickname); i++){
+        if(buf[i] == Nickname[i]){
+          ok++;
+        }
+      }
+      if(ok != strlen(Nickname)){
+        printf("%s.\n", buf);
+      }
+      
     }
     if (FD_ISSET(0, &read_fds))
     {
@@ -195,14 +210,20 @@ int main(int argc, char *argv[])
       string temp;
       getline(cin, temp);
       userInput = "MSG " + temp;
-      printf("Sending: %s\n", userInput.c_str());
-
-      numbytes = send(sock, userInput.c_str(), userInput.length(), 0);
-      if (numbytes < 0)
+      if (strlen(userInput.c_str()) > 2255)
       {
-        printf("Could not send.\n");
-        close(sock);
-        exit(1);
+        printf("Message is too long.\n");
+      }
+      else
+      {
+        //printf("Sending: %s\n", userInput.c_str());
+        numbytes = send(sock, userInput.c_str(), userInput.length(), 0);
+        if (numbytes < 0)
+        {
+          printf("Could not send.\n");
+          close(sock);
+          exit(1);
+        }
       }
     }
   }
