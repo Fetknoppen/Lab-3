@@ -14,6 +14,35 @@
 
 using namespace std;
 
+string removeWord(string str, string word)
+{
+  // Check if the word is present in string
+  // If found, remove it using removeAll()
+  if (str.find(word) != string::npos)
+  {
+    size_t p = -1;
+
+    // To cover the case
+    // if the word is at the
+    // beginning of the string
+    // or anywhere in the middle
+    string tempWord = word + " ";
+    while ((p = str.find(word)) != string::npos)
+      str.replace(p, tempWord.length(), "");
+
+    // To cover the edge case
+    // if the word is at the
+    // end of the string
+    tempWord = " " + word;
+    while ((p = str.find(word)) != string::npos)
+      str.replace(p, tempWord.length(), "");
+  }
+
+  // Return the resultant string
+  return str;
+}
+
+
 void *get_in_addr(struct sockaddr *sa)
 {
   if (sa->sa_family == AF_INET)
@@ -192,15 +221,17 @@ int main(int argc, char *argv[])
         close(sock);
         exit(1);
       }
+      string str_obj("MSG "+ string(Nickname));
+      char* cmp = &str_obj[0];
       //Was this msg from me?
       int ok = 0;
-      for(int i = 0; i < strlen(Nickname); i++){
-        if(buf[i] == Nickname[i]){
+      for(int i = 0; i < strlen(cmp); i++){
+        if(buf[i] == cmp[i]){
           ok++;
         }
       }
-      if(ok != strlen(Nickname)){
-        printf("%s.\n", buf);
+      if(ok != strlen(cmp)){
+        printf("%s\n", buf);
       }
       
     }
@@ -216,7 +247,7 @@ int main(int argc, char *argv[])
       }
       else
       {
-        //printf("Sending: %s\n", userInput.c_str());
+        printf("Sending: %s\n", userInput.c_str());
         numbytes = send(sock, userInput.c_str(), userInput.length(), 0);
         if (numbytes < 0)
         {

@@ -44,8 +44,8 @@ string removeWord(string str, string word)
 int main(int argc, char *argv[])
 {
 
-  //Ta emot ip, port and nickname in the following format:
-  //ip:port nickname
+  //Takes ip and port in the following format:
+  //ip:port
   if (argc != 2)
   {
     //We dont have the correct input. Exit the program
@@ -214,16 +214,17 @@ int main(int argc, char *argv[])
           else if (string(buf).find(cmds[1]) != string::npos)
           {
             //Found "MSG "
-            printf("MSG.\n");
+            //printf("MSG.\n");
             string msg = removeWord(string(buf), "MSG");
-            msg = nicknames[i] + ": " + msg;
-            printf("MSG: %s\n", msg.c_str());
+            msg = "MSG " + nicknames[i] + " " + msg;
+            printf("%s\n", msg.c_str());
             for (int k = 0; k <= fdmax; k++)
             {
               if (FD_ISSET(k, &master))
               {
                 if (k != listener/* && k != i*/)
                 {
+                  printf("Sending: %s\n", msg.c_str());
                   if (send(k, msg.c_str(), msg.length(), 0) < 0)
                   {
                     printf("Send.\n");
