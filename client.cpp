@@ -230,8 +230,12 @@ int main(int argc, char *argv[])
           ok++;
         }
       }
+      string printMsg;
       if(ok != strlen(cmp)){
-        printf("%s\n", buf);
+        for(int k = 4; k < sizeof(buf); k++){
+          printMsg += buf[k];
+        }
+        printf("%s\n", printMsg.c_str());
       }
       
     }
@@ -240,14 +244,14 @@ int main(int argc, char *argv[])
       //Client is writing something
       string temp;
       getline(cin, temp);
-      userInput = "MSG " + temp;
+      userInput = "MSG " + temp + "\n";
       if (strlen(userInput.c_str()) > 2255)
       {
         printf("Message is too long.\n");
       }
       else
       {
-        printf("Sending: %s\n", userInput.c_str());
+        //printf("Sending: %s\n", userInput.c_str());
         numbytes = send(sock, userInput.c_str(), userInput.length(), 0);
         if (numbytes < 0)
         {

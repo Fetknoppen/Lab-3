@@ -213,21 +213,44 @@ int main(int argc, char *argv[])
           }
           else if (string(buf).find(cmds[1]) != string::npos)
           {
-            //Found "MSG "
-            //printf("MSG.\n");
-            string msg = removeWord(string(buf), "MSG");
-            msg = "MSG " + nicknames[i] + " " + msg;
-            printf("%s\n", msg.c_str());
+            string msg[5];
+            int nrOfMsgs = 0;
+            int sizeOfMsg = 0;
+            for (int k = 0; k < sizeof(buf); k++)
+            {
+              sizeOfMsg++;
+              if (buf[k] == '\n')
+              {
+                //printf("Found the msg.\n");
+                msg[nrOfMsgs] = "";
+                for (int s = k - sizeOfMsg + 4; s < k; s++)
+                {
+                  msg[nrOfMsgs] += buf[s];
+                }
+                sizeOfMsg = 0;
+                nrOfMsgs++;
+              }
+            }
+            for (int k = 0; k < nrOfMsgs; k++)
+            {
+              //printf("The msg was: %s\n", msg[k].c_str());
+              msg[k] = "MSG " + nicknames[i] + msg[k] + "\n";
+            }
+
+            //printf("%s\n", msg);
             for (int k = 0; k <= fdmax; k++)
             {
               if (FD_ISSET(k, &master))
               {
-                if (k != listener/* && k != i*/)
+                if (k != listener) //&& k != i
                 {
-                  printf("Sending: %s\n", msg.c_str());
-                  if (send(k, msg.c_str(), msg.length(), 0) < 0)
+                  for (int s = 0; s < nrOfMsgs; s++)
                   {
-                    printf("Send.\n");
+                    printf("Sending: %s\n", msg[s].c_str());
+                    if (send(k, msg[s].c_str(), msg[s].length(), 0) < 0)
+                    {
+                      printf("Send.\n");
+                    }
                   }
                 }
               }
